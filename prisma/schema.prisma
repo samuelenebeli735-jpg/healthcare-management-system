@@ -1,6 +1,5 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -20,4 +19,67 @@ model Organization {
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  users       User[]
+}
+
+model User {
+  id             String   @id @default(cuid())
+
+  organizationId String
+
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  profile        Profile?
+
+  email          String? @unique
+
+  password       String
+
+  role           Role
+
+  isActive       Boolean @default(true)
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Profile {
+  id                       String   @id @default(cuid())
+
+  userId                   String   @unique
+
+  user                     User     @relation(fields: [userId], references: [id])
+
+  firstName                String
+  middleName               String?
+  lastName                 String
+
+  matricNumber             String   @unique
+
+  faculty                  String
+  department               String
+  level                    String
+
+  gender                   String
+  dateOfBirth              DateTime
+
+  phone                    String
+
+  emergencyContactName     String
+  emergencyContactPhone    String
+
+  bloodGroup               String?
+  genotype                 String?
+  allergies                String?
+
+  profilePhotoUrl          String?
+
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
+}
+
+enum Role {
+  student
+  staff
+  admin
+  super_admin
 }
