@@ -56,6 +56,14 @@ app.get(`${API_PREFIX}/health`, (req, res) => {
   });
 });
 
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+*/
+
+app.use(API_PREFIX, routes);
+
 app.use(notFoundMiddleware);
 
 app.use(errorMiddleware);

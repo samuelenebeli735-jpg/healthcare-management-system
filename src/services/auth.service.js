@@ -7,6 +7,7 @@ import {
 
 import {
   findUserByEmail,
+  findUserWithProfileByEmail,
   createUser,
 } from "../repositories/user.repository.js";
 
@@ -17,6 +18,7 @@ import {
 
 import {
   hashPassword,
+  comparePassword,
 } from "../utils/password.js";
 
 import generateToken from "../utils/generateToken.js";
@@ -39,8 +41,8 @@ export async function registerStudent(data) {
   const existingUser = await findUserByEmail(data.email);
 
   if (existingUser) {
-    throw new Error("Email already exists.", 409);
-  }
+  throw new AppError("Email already exists.", 409);
+}
 
   // Check if matric number already exists
   const existingProfile = await findProfileByMatricNumber(
@@ -91,13 +93,54 @@ export async function registerStudent(data) {
     return { user, profile };
   });
 
-  // Generate JWT
-  const token = generateToken(result.user);
+  const { password, ...safeUser } = result.user;
 
-  // Return the registration result
-  return {
-    user: result.user,
-    profile: result.profile,
-    token,
-  };
+const token = generateToken(safeUser);
+
+return {
+  user: safeUser,
+  profile: result.profile,
+  token,
+};
+}
+
+/**
+ * Login a student.
+ *
+ * @param {Object} data
+ * @returns {Promise<Object>}
+ */
+export async function loginStudent(data) {
+  // Find the user
+  const user = await findUserWithProfileByEmail(data.identifier);
+
+  if (!user) {
+    throw new AppError("Invalid email or password.", 401);
+  }
+
+  // Verify password
+  const passwordMatches = await comparePassword(
+    data.password,
+    user.password
+  );
+
+  if (!passwordMatches) {
+    throw new AppError("Invalid email or password.", 401);
+  }
+
+  // Check if account is active
+  if (!user.isActive) {
+    throw new AppError("Your account has been deactivated.", 403);
+  }
+
+  // Remove password before returning
+const { password, ...safeUser } = user;
+
+// Generate JWT
+const token = generateToken(safeUser);
+
+return {
+  user: safeUser,
+  token,
+};
 }

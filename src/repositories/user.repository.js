@@ -12,6 +12,21 @@ export async function findUserByEmail(email, db = prisma) {
 }
 
 /**
+ * Find a user by email including their profile.
+ */
+export async function findUserWithProfileByEmail(email, db = prisma) {
+  return await db.user.findUnique({
+    where: {
+      email,
+    },
+    include: {
+      profile: true,
+      organization: true,
+    },
+  });
+}
+
+/**
  * Find a user by ID.
  */
 export async function findUserById(id, db = prisma) {
