@@ -2,6 +2,7 @@ import { Router } from "express";
 
 import authRoutes from "./auth.routes.js";
 import organizationRoutes from "./organizations.routes.js";
+import profileRoutes from "./profiles.routes.js";
 
 const router = Router();
 
@@ -33,5 +34,17 @@ router.use("/auth", authRoutes);
 */
 
 router.use("/organizations", organizationRoutes);
+
+/*
+|--------------------------------------------------------------------------
+| Profile Routes
+|--------------------------------------------------------------------------
+*/
+
+router.use("/auth", authRoutes);
+
+router.use("/organizations", organizationRoutes);
+
+router.use("/profiles", profileRoutes);
 
 export default router;
