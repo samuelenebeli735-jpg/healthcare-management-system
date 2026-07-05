@@ -3,6 +3,8 @@ import { Router } from "express";
 import authRoutes from "./auth.routes.js";
 import organizationRoutes from "./organizations.routes.js";
 import profileRoutes from "./profiles.routes.js";
+import medicalRecordRoutes from "./medical-record.routes.js";
+import departmentRoutes from "./departments.routes.js";
 
 const router = Router();
 
@@ -46,5 +48,9 @@ router.use("/auth", authRoutes);
 router.use("/organizations", organizationRoutes);
 
 router.use("/profiles", profileRoutes);
+
+router.use("/medical-records", medicalRecordRoutes);
+
+router.use("/departments", departmentRoutes);
 
 export default router;
