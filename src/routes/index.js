@@ -7,6 +7,7 @@ import medicalRecordRoutes from "./medical-record.routes.js";
 import departmentRoutes from "./departments.routes.js";
 import positionRoutes from "./positions.routes.js";
 import staffRoutes from "./staff.routes.js";
+import serviceRoutes from "./services.routes.js";
 
 const router = Router();
 
@@ -58,5 +59,7 @@ router.use("/departments", departmentRoutes);
 router.use("/positions", positionRoutes);
 
 router.use("/staff", staffRoutes);
+
+router.use("/services", serviceRoutes);
 
 export default router;

@@ -23,6 +23,7 @@ model Organization {
   users       User[]
   departments Department[]
   positions   Position[]
+  services    Service[]
 }
 
 model User {
@@ -179,6 +180,27 @@ model Position {
   code String
 
   description String?
+
+  isActive Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([organizationId, code])
+}
+
+model Service {
+  id String @id @default(cuid())
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  name String
+  code String
+
+  description String?
+
+  estimatedDuration Int @default(15)
 
   isActive Boolean @default(true)
 
