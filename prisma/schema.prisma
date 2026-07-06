@@ -32,6 +32,7 @@ model User {
 
   organization Organization @relation(fields: [organizationId], references: [id])
   profile      Profile?
+  staff        Staff?
 
   email String? @unique
 
@@ -100,6 +101,43 @@ model MedicalRecord {
   updatedAt DateTime @updatedAt
 }
 
+model Staff {
+  id String @id @default(cuid())
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  departmentId String
+  positionId   String
+
+  department Department @relation(fields: [departmentId], references: [id])
+  position   Position   @relation(fields: [positionId], references: [id])
+
+  staffNumber String @unique
+
+  firstName  String
+  middleName String?
+  lastName   String
+
+  gender      String
+  dateOfBirth DateTime
+
+  phone String
+
+  employmentDate DateTime
+
+  qualification String?
+
+  licenseNumber String?
+
+  profilePhotoUrl String?
+
+  employmentStatus EmploymentStatus @default(active)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Department {
   id String @id @default(cuid())
 
@@ -124,6 +162,8 @@ model Department {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  staff Staff[]
+
   @@unique([organizationId, code])
 }
 
@@ -132,6 +172,8 @@ model Position {
 
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])
+
+  staff Staff[]
 
   name String
   code String
@@ -156,4 +198,11 @@ enum Role {
 enum MedicalRecordStatus {
   active
   archived
+}
+
+enum EmploymentStatus {
+  active
+  suspended
+  resigned
+  retired
 }
