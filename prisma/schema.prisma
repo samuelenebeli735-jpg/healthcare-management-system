@@ -22,6 +22,7 @@ model Organization {
   updatedAt   DateTime     @updatedAt
   users       User[]
   departments Department[]
+  positions   Position[]
 }
 
 model User {
@@ -117,6 +118,25 @@ model Department {
   phone String?
 
   email String?
+
+  isActive Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([organizationId, code])
+}
+
+model Position {
+  id String @id @default(cuid())
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  name String
+  code String
+
+  description String?
 
   isActive Boolean @default(true)
 
