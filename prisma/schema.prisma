@@ -18,12 +18,13 @@ model Organization {
 
   isActive Boolean @default(true)
 
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  users       User[]
-  departments Department[]
-  positions   Position[]
-  services    Service[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  users        User[]
+  departments  Department[]
+  positions    Position[]
+  services     Service[]
+  appointments Appointment[]
 }
 
 model User {
@@ -95,6 +96,8 @@ model MedicalRecord {
 
   recordYear Int
 
+  appointments Appointment[]
+
   status MedicalRecordStatus @default(active)
 
   createdAt DateTime @default(now())
@@ -113,6 +116,8 @@ model Staff {
 
   department Department @relation(fields: [departmentId], references: [id])
   position   Position   @relation(fields: [positionId], references: [id])
+
+  appointments Appointment[]
 
   staffNumber String @unique
 
@@ -195,6 +200,8 @@ model Service {
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])
 
+  appointments Appointment[]
+
   name String
   code String
 
@@ -208,6 +215,31 @@ model Service {
   updatedAt DateTime @updatedAt
 
   @@unique([organizationId, code])
+}
+
+model Appointment {
+  id String @id @default(cuid())
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  medicalRecordId String
+  medicalRecord   MedicalRecord @relation(fields: [medicalRecordId], references: [id])
+
+  serviceId String
+  service   Service @relation(fields: [serviceId], references: [id])
+
+  staffId String?
+  staff   Staff?  @relation(fields: [staffId], references: [id])
+
+  appointmentDate DateTime
+
+  reason String?
+
+  status AppointmentStatus @default(scheduled)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum Role {
@@ -227,4 +259,14 @@ enum EmploymentStatus {
   suspended
   resigned
   retired
+}
+
+enum AppointmentStatus {
+  scheduled
+  confirmed
+  checked_in
+  in_progress
+  completed
+  cancelled
+  no_show
 }

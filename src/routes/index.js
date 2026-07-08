@@ -8,6 +8,7 @@ import departmentRoutes from "./departments.routes.js";
 import positionRoutes from "./positions.routes.js";
 import staffRoutes from "./staff.routes.js";
 import serviceRoutes from "./services.routes.js";
+import appointmentRoutes from "./appointments.routes.js";
 
 const router = Router();
 
@@ -30,21 +31,6 @@ router.get("/", (req, res) => {
 |--------------------------------------------------------------------------
 */
 
-router.use("/auth", authRoutes);
-
-/*
-|--------------------------------------------------------------------------
-| Organization Routes
-|--------------------------------------------------------------------------
-*/
-
-router.use("/organizations", organizationRoutes);
-
-/*
-|--------------------------------------------------------------------------
-| Profile Routes
-|--------------------------------------------------------------------------
-*/
 
 router.use("/auth", authRoutes);
 
@@ -61,5 +47,7 @@ router.use("/positions", positionRoutes);
 router.use("/staff", staffRoutes);
 
 router.use("/services", serviceRoutes);
+
+router.use("/appointments", appointmentRoutes);
 
 export default router;
