@@ -15,10 +15,10 @@ export const createAppointment = asyncHandler(
     const appointment = await createNewAppointment(req.body);
 
     return successResponse(
-      res,
-      "Appointment created successfully.",
-      appointment,
-      201
+    res,
+    appointment,
+    "Appointment created successfully.",
+    201
     );
   }
 );
@@ -35,8 +35,9 @@ export const getAppointments = asyncHandler(
 
     return successResponse(
       res,
+      appointments,
       "Appointments retrieved successfully.",
-      appointments
+      200
     );
   }
 );

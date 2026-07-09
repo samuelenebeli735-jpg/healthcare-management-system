@@ -1,14 +1,14 @@
 import { Router } from "express";
 
-import authRoutes from "./auth.routes.js";
-import organizationRoutes from "./organizations.routes.js";
-import profileRoutes from "./profiles.routes.js";
-import medicalRecordRoutes from "./medical-record.routes.js";
-import departmentRoutes from "./departments.routes.js";
-import positionRoutes from "./positions.routes.js";
-import staffRoutes from "./staff.routes.js";
-import serviceRoutes from "./services.routes.js";
-import appointmentRoutes from "./appointments.routes.js";
+import authRoutes from "./auth.route.js";
+import organizationRoutes from "./organization.route.js";
+import profileRoutes from "./profile.route.js";
+import medicalRecordRoutes from "./medical-record.route.js";
+import departmentRoutes from "./department.route.js";
+import positionRoutes from "./position.route.js";
+import staffRoutes from "./staff.route.js";
+import serviceRoutes from "./service.route.js";
+import appointmentRoutes from "./appointment.route.js";
 
 const router = Router();
 

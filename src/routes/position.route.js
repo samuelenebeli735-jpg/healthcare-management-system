@@ -1,21 +1,31 @@
 import { Router } from "express";
 
-import { createOrganization } from "../controllers/organizations.controller.js";
 import validate from "../middleware/validate.middleware.js";
-import { createOrganizationSchema } from "../validations/organization.validation.js";
+
+import { createPositionSchema } from "../validations/position.validation.js";
+
+import {
+  createPosition,
+  getPositions,
+} from "../controllers/position.controller.js";
 
 const router = Router();
 
 /*
 |--------------------------------------------------------------------------
-| Organization Routes
+| Positions
 |--------------------------------------------------------------------------
 */
 
 router.post(
   "/",
-  validate(createOrganizationSchema),
-  createOrganization
+  validate(createPositionSchema),
+  createPosition
+);
+
+router.get(
+  "/:organizationId",
+  getPositions
 );
 
 export default router;

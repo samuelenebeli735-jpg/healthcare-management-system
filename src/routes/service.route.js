@@ -7,7 +7,7 @@ import { createServiceSchema } from "../validations/service.validation.js";
 import {
   createService,
   getServices,
-} from "../controllers/services.controller.js";
+} from "../controllers/service.controller.js";
 
 const router = Router();
 

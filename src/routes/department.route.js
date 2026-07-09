@@ -9,7 +9,7 @@ import {
 import {
   createDepartment,
   getDepartments,
-} from "../controllers/departments.controller.js";
+} from "../controllers/department.controller.js";
 
 const router = Router();
 

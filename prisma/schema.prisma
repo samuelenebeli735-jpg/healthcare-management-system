@@ -5,6 +5,10 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  // The datasource connection URL has been moved out of the schema file.
+  // Configure the database URL in prisma.config.ts and pass the
+  // appropriate adapter/accelerateUrl to the PrismaClient constructor.
+  // See https://pris.ly/d/config-datasource and https://pris.ly/d/prisma7-client-config
 }
 
 model Organization {
@@ -25,6 +29,7 @@ model Organization {
   positions    Position[]
   services     Service[]
   appointments Appointment[]
+  queues       Queue[]
 }
 
 model User {
@@ -236,9 +241,39 @@ model Appointment {
 
   reason String?
 
+  queue Queue?
+
   status AppointmentStatus @default(scheduled)
 
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Queue {
+  id String @id @default(cuid())
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  appointmentId String      @unique
+  appointment   Appointment @relation(fields: [appointmentId], references: [id])
+
+  queueNumber Int
+
+  status QueueStatus @default(waiting)
+
+  checkedInAt DateTime @default(now())
+
+  calledAt DateTime?
+
+  startedAt DateTime?
+
+  completedAt DateTime?
+
+  estimatedWaitMinutes Int?
+
+  createdAt DateTime @default(now())
+
   updatedAt DateTime @updatedAt
 }
 
@@ -269,4 +304,12 @@ enum AppointmentStatus {
   completed
   cancelled
   no_show
+}
+
+enum QueueStatus {
+  waiting
+  called
+  in_progress
+  completed
+  cancelled
 }

@@ -3,7 +3,7 @@ import { Router } from "express";
 import {
   createAppointment,
   getAppointments,
-} from "../controllers/appointments.controller.js";
+} from "../controllers/appointment.controller.js";
 
 import validate from "../middleware/validate.middleware.js";
 
