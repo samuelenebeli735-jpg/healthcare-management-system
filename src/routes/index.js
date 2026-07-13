@@ -10,6 +10,7 @@ import staffRoutes from "./staff.route.js";
 import serviceRoutes from "./service.route.js";
 import appointmentRoutes from "./appointment.route.js";
 import queueRoutes from "./queue.route.js";
+import scheduleRoutes from "./schedule.route.js";
 
 const router = Router();
 
@@ -52,5 +53,7 @@ router.use("/services", serviceRoutes);
 router.use("/appointments", appointmentRoutes);
 
 router.use("/queues", queueRoutes);
+
+router.use("/schedules", scheduleRoutes);
 
 export default router;

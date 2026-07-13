@@ -30,6 +30,7 @@ model Organization {
   services     Service[]
   appointments Appointment[]
   queues       Queue[]
+  schedules Schedule[]
 }
 
 model User {
@@ -124,6 +125,8 @@ model Staff {
 
   appointments Appointment[]
 
+  schedules Schedule[]
+
   staffNumber String @unique
 
   firstName  String
@@ -147,6 +150,35 @@ model Staff {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Schedule {
+  id             String @id @default(cuid())
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  staffId        String
+  staff          Staff @relation(fields: [staffId], references: [id])
+
+  dayOfWeek      DayOfWeek
+
+  startTime      DateTime
+  endTime        DateTime
+
+  breakStart     DateTime?
+  breakEnd       DateTime?
+
+  isActive       Boolean @default(true)
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@unique([staffId, dayOfWeek])
+
+  @@index([organizationId])
+  @@index([staffId])
+  @@index([dayOfWeek])
 }
 
 model Department {
@@ -312,4 +344,14 @@ enum QueueStatus {
   in_progress
   completed
   cancelled
+}
+
+enum DayOfWeek {
+  monday
+  tuesday
+  wednesday
+  thursday
+  friday
+  saturday
+  sunday
 }
