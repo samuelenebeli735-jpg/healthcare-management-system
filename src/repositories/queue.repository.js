@@ -45,12 +45,14 @@ export async function findTodayQueue(
 ) {
   return await db.queue.findMany({
     where: {
-      organizationId,
-      createdAt: {
-        gte: startOfDay,
-        lte: endOfDay,
-      },
+  organizationId,
+  appointment: {
+    appointmentDate: {
+      gte: startOfDay,
+      lte: endOfDay,
     },
+  },
+},
     include: {
       appointment: {
         include: {

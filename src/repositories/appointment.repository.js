@@ -49,3 +49,24 @@ export async function createAppointment(data, db = prisma) {
     },
   });
 }
+
+/**
+ * Update an appointment.
+ */
+export async function updateAppointment(
+  id,
+  data,
+  db = prisma
+) {
+  return await db.appointment.update({
+    where: {
+      id,
+    },
+    data,
+    include: {
+      medicalRecord: true,
+      service: true,
+      staff: true,
+    },
+  });
+}
