@@ -1,4 +1,5 @@
 import AppError from "../utils/AppError.js";
+import validateSchedule from "../utils/scheduleValidator.js";
 
 import {
   findOrganizationById,
@@ -44,43 +45,64 @@ export async function createNewAppointment(data) {
   }
 
   // Check service
-const service = await findServiceById(
-  data.serviceId
-);
-
-if (!service) {
-  throw new AppError("Clinical service not found.", 404);
-}
-
-if (service.organizationId !== data.organizationId) {
-  throw new AppError(
-    "Clinical service does not belong to this organization.",
-    400
+  const service = await findServiceById(
+    data.serviceId
   );
-}
 
-// Staff is optional
-if (data.staffId) {
-  const staff = await findStaffById(data.staffId);
-
-  if (!staff) {
-    throw new AppError("Staff not found.", 404);
+  if (!service) {
+    throw new AppError(
+      "Clinical service not found.",
+      404
+    );
   }
 
-  if (staff.user.organizationId !== data.organizationId) {
+  if (
+    service.organizationId !==
+    data.organizationId
+  ) {
     throw new AppError(
-      "Staff does not belong to this organization.",
+      "Clinical service does not belong to this organization.",
       400
     );
   }
-}
+
+  // Staff is optional
+  let staff = null;
+
+  if (data.staffId) {
+    staff = await findStaffById(data.staffId);
+
+    if (!staff) {
+      throw new AppError(
+        "Staff not found.",
+        404
+      );
+    }
+
+    if (
+      staff.user.organizationId !==
+      data.organizationId
+    ) {
+      throw new AppError(
+        "Staff does not belong to this organization.",
+        400
+      );
+    }
+
+    await validateSchedule(
+      staff,
+      data.appointmentDate
+    );
+  }
 
   return await createAppointment({
     organizationId: data.organizationId,
     medicalRecordId: data.medicalRecordId,
     serviceId: data.serviceId,
     staffId: data.staffId || null,
-    appointmentDate: new Date(data.appointmentDate),
+    appointmentDate: new Date(
+      data.appointmentDate
+    ),
     reason: data.reason,
   });
 }
