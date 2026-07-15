@@ -70,3 +70,24 @@ export async function updateAppointment(
     },
   });
 }
+
+/**
+ * Find an appointment for a staff member at a specific date and time.
+ */
+export async function findAppointmentByStaffAndDate(
+  staffId,
+  appointmentDate,
+  db = prisma
+) {
+  return await db.appointment.findFirst({
+    where: {
+      staffId,
+      appointmentDate,
+    },
+    include: {
+      medicalRecord: true,
+      service: true,
+      staff: true,
+    },
+  });
+}

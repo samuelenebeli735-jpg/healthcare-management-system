@@ -20,6 +20,7 @@ import {
 import {
   createAppointment,
   findAppointmentsByOrganization,
+  findAppointmentByStaffAndDate,
 } from "../repositories/appointment.repository.js";
 
 /**
@@ -93,6 +94,20 @@ export async function createNewAppointment(data) {
       staff,
       data.appointmentDate
     );
+
+    const existingAppointment =
+  await findAppointmentByStaffAndDate(
+    staff.id,
+    new Date(data.appointmentDate)
+  );
+
+if (existingAppointment) {
+  throw new AppError(
+    "Staff already has an appointment at this time.",
+    400
+  );
+}
+
   }
 
   return await createAppointment({
