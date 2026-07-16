@@ -10,6 +10,7 @@ export async function findAppointmentById(id, db = prisma) {
       medicalRecord: true,
       service: true,
       staff: true,
+      queue: true,
     },
   });
 }

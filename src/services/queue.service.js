@@ -47,6 +47,23 @@ export async function checkInPatient(data) {
     );
   }
 
+  const today = new Date();
+
+const appointmentDate = new Date(
+  appointment.appointmentDate
+);
+
+if (
+  today.getFullYear() !== appointmentDate.getFullYear() ||
+  today.getMonth() !== appointmentDate.getMonth() ||
+  today.getDate() !== appointmentDate.getDate()
+) {
+  throw new AppError(
+    "You can only check in on your appointment date.",
+    400
+  );
+}
+
   const existingQueue =
     await findQueueByAppointmentId(
       data.appointmentId

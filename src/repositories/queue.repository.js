@@ -44,28 +44,28 @@ export async function findTodayQueue(
   db = prisma
 ) {
   return await db.queue.findMany({
-    where: {
-  organizationId,
-  appointment: {
-    appointmentDate: {
-      gte: startOfDay,
-      lte: endOfDay,
-    },
-  },
-},
-    include: {
-      appointment: {
-        include: {
-          medicalRecord: true,
-          service: true,
-          staff: true,
-        },
+  where: {
+    organizationId,
+    appointment: {
+      appointmentDate: {
+        gte: startOfDay,
+        lte: endOfDay,
       },
     },
-    orderBy: {
-      queueNumber: "asc",
+  },
+  include: {
+    appointment: {
+      include: {
+        medicalRecord: true,
+        service: true,
+        staff: true,
+      },
     },
-  });
+  },
+  orderBy: {
+    queueNumber: "asc",
+  },
+});
 }
 
 /**
