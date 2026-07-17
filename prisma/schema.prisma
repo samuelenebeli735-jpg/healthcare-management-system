@@ -31,6 +31,7 @@ model Organization {
   appointments Appointment[]
   queues       Queue[]
   schedules Schedule[]
+  auditLogs AuditLog[]
 }
 
 model User {
@@ -49,6 +50,8 @@ model User {
   role Role
 
   isActive Boolean @default(true)
+
+  auditLogs AuditLog[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -290,6 +293,8 @@ model Queue {
   appointmentId String      @unique
   appointment   Appointment @relation(fields: [appointmentId], references: [id])
 
+  consultation Consultation?
+
   queueNumber Int
 
   status QueueStatus @default(waiting)
@@ -307,6 +312,59 @@ model Queue {
   createdAt DateTime @default(now())
 
   updatedAt DateTime @updatedAt
+}
+
+model Consultation {
+  id String @id @default(cuid())
+
+  queueId String @unique
+  queue   Queue @relation(fields: [queueId], references: [id])
+
+  chiefComplaint String?
+
+  symptoms String?
+
+  diagnosis String?
+
+  treatmentPlan String?
+
+  notes String?
+
+  consultationDate DateTime @default(now())
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+}
+
+model AuditLog {
+  id String @id @default(cuid())
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  userId String?
+  user   User? @relation(fields: [userId], references: [id])
+
+  action String
+
+  entity String
+
+  entityId String?
+
+  description String?
+
+  ipAddress String?
+
+  userAgent String?
+
+  createdAt DateTime @default(now())
+
+  @@index([organizationId])
+  @@index([userId])
+  @@index([entity])
+  @@index([action])
+  @@index([createdAt])
 }
 
 enum Role {

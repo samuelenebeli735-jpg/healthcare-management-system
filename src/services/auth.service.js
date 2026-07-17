@@ -1,5 +1,6 @@
 import prisma from "../config/db.js";
 import AppError from "../utils/AppError.js";
+import { auditLogger } from "../utils/auditLogger.js";
 
 import {
   findOrganizationById,
@@ -97,6 +98,15 @@ export async function registerStudent(data) {
 
 const token = generateToken(safeUser);
 
+await auditLogger({
+  organizationId: safeUser.organizationId,
+  userId: safeUser.id,
+  action: "REGISTER",
+  entity: "User",
+  entityId: safeUser.id,
+  description: `Student ${result.profile.firstName} ${result.profile.lastName} registered.`,
+});
+
 return {
   user: safeUser,
   profile: result.profile,
@@ -138,6 +148,15 @@ const { password, ...safeUser } = user;
 
 // Generate JWT
 const token = generateToken(safeUser);
+
+await auditLogger({
+  organizationId: safeUser.organizationId,
+  userId: safeUser.id,
+  action: "LOGIN",
+  entity: "User",
+  entityId: safeUser.id,
+  description: `${safeUser.email} logged in.`,
+});
 
 return {
   user: safeUser,

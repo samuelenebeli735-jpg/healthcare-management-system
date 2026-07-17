@@ -11,6 +11,8 @@ import serviceRoutes from "./service.route.js";
 import appointmentRoutes from "./appointment.route.js";
 import queueRoutes from "./queue.route.js";
 import scheduleRoutes from "./schedule.route.js";
+import consultationRoutes from "./consultation.route.js";
+import auditRoutes from "./audit.route.js";
 
 const router = Router();
 
@@ -55,5 +57,9 @@ router.use("/appointments", appointmentRoutes);
 router.use("/queues", queueRoutes);
 
 router.use("/schedules", scheduleRoutes);
+
+router.use("/consultations", consultationRoutes);
+
+router.use("/audit", auditRoutes);
 
 export default router;
