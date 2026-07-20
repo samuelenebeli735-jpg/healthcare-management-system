@@ -1,59 +1,61 @@
-import { body } from "express-validator";
+import { z } from "zod";
 
-export const createConsultationValidation = [
-  body("queueId")
-    .notEmpty()
-    .withMessage("Queue ID is required."),
+/*
+|--------------------------------------------------------------------------
+| Create Consultation Validation
+|--------------------------------------------------------------------------
+*/
 
-  body("chiefComplaint")
-    .optional()
-    .isString()
-    .withMessage("Chief complaint must be text."),
+export const createConsultationSchema = z.object({
+  queueId: z
+    .string()
+    .min(1, "Queue ID is required."),
 
-  body("symptoms")
-    .optional()
-    .isString()
-    .withMessage("Symptoms must be text."),
+  chiefComplaint: z
+    .string()
+    .optional(),
 
-  body("diagnosis")
-    .optional()
-    .isString()
-    .withMessage("Diagnosis must be text."),
+  symptoms: z
+    .string()
+    .optional(),
 
-  body("treatmentPlan")
-    .optional()
-    .isString()
-    .withMessage("Treatment plan must be text."),
+  diagnosis: z
+    .string()
+    .optional(),
 
-  body("notes")
-    .optional()
-    .isString()
-    .withMessage("Notes must be text.")
-];
+  treatmentPlan: z
+    .string()
+    .optional(),
 
-export const updateConsultationValidation = [
-  body("chiefComplaint")
-    .optional()
-    .isString()
-    .withMessage("Chief complaint must be text."),
+  notes: z
+    .string()
+    .optional(),
+});
 
-  body("symptoms")
-    .optional()
-    .isString()
-    .withMessage("Symptoms must be text."),
+/*
+|--------------------------------------------------------------------------
+| Update Consultation Validation
+|--------------------------------------------------------------------------
+*/
 
-  body("diagnosis")
-    .optional()
-    .isString()
-    .withMessage("Diagnosis must be text."),
+export const updateConsultationSchema = z.object({
+  chiefComplaint: z
+    .string()
+    .optional(),
 
-  body("treatmentPlan")
-    .optional()
-    .isString()
-    .withMessage("Treatment plan must be text."),
+  symptoms: z
+    .string()
+    .optional(),
 
-  body("notes")
-    .optional()
-    .isString()
-    .withMessage("Notes must be text.")
-];
+  diagnosis: z
+    .string()
+    .optional(),
+
+  treatmentPlan: z
+    .string()
+    .optional(),
+
+  notes: z
+    .string()
+    .optional(),
+});

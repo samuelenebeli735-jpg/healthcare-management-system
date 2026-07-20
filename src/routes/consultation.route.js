@@ -1,5 +1,9 @@
 import { Router } from "express";
 
+import authenticate from "../middleware/auth.middleware.js";
+import authorize from "../middleware/role.middleware.js";
+import validate from "../middleware/validate.middleware.js";
+
 import {
   create,
   getAll,
@@ -8,11 +12,9 @@ import {
   remove,
 } from "../controllers/consultation.controller.js";
 
-import validate from "../middleware/validate.middleware.js";
-
 import {
-  createConsultationValidation,
-  updateConsultationValidation,
+  createConsultationSchema,
+  updateConsultationSchema,
 } from "../validations/consultation.validation.js";
 
 const router = Router();
@@ -22,32 +24,51 @@ const router = Router();
  */
 router.post(
   "/",
-  validate(createConsultationValidation),
+  authenticate,
+  authorize("staff", "admin", "super_admin"),
+  validate(createConsultationSchema),
   create
 );
 
 /**
  * Get all consultations.
  */
-router.get("/", getAll);
+router.get(
+  "/",
+  authenticate,
+  authorize("staff", "admin", "super_admin"),
+  getAll
+);
 
 /**
  * Get consultation by ID.
  */
-router.get("/:id", getById);
+router.get(
+  "/:id",
+  authenticate,
+  authorize("staff", "admin", "super_admin"),
+  getById
+);
 
 /**
  * Update consultation.
  */
 router.patch(
   "/:id",
-  validate(updateConsultationValidation),
+  authenticate,
+  authorize("staff", "admin", "super_admin"),
+  validate(updateConsultationSchema),
   update
 );
 
 /**
  * Delete consultation.
  */
-router.delete("/:id", remove);
+router.delete(
+  "/:id",
+  authenticate,
+  authorize("staff", "admin", "super_admin"),
+  remove
+);
 
 export default router;

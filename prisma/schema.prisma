@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url= env("DATABASE_URL")
   // The datasource connection URL has been moved out of the schema file.
   // Configure the database URL in prisma.config.ts and pass the
   // appropriate adapter/accelerateUrl to the PrismaClient constructor.
@@ -30,8 +30,8 @@ model Organization {
   services     Service[]
   appointments Appointment[]
   queues       Queue[]
-  schedules Schedule[]
-  auditLogs AuditLog[]
+  schedules    Schedule[]
+  auditLogs    AuditLog[]
 }
 
 model User {
@@ -156,29 +156,28 @@ model Staff {
 }
 
 model Schedule {
-  id             String @id @default(cuid())
+  id String @id @default(cuid())
 
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])
 
-  staffId        String
-  staff          Staff @relation(fields: [staffId], references: [id])
+  staffId String
+  staff   Staff  @relation(fields: [staffId], references: [id])
 
-  dayOfWeek      DayOfWeek
+  dayOfWeek DayOfWeek
 
-  startTime      DateTime
-  endTime        DateTime
+  startTime DateTime
+  endTime   DateTime
 
-  breakStart     DateTime?
-  breakEnd       DateTime?
+  breakStart DateTime?
+  breakEnd   DateTime?
 
-  isActive       Boolean @default(true)
+  isActive Boolean @default(true)
 
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([staffId, dayOfWeek])
-
   @@index([organizationId])
   @@index([staffId])
   @@index([dayOfWeek])
@@ -318,7 +317,7 @@ model Consultation {
   id String @id @default(cuid())
 
   queueId String @unique
-  queue   Queue @relation(fields: [queueId], references: [id])
+  queue   Queue  @relation(fields: [queueId], references: [id])
 
   chiefComplaint String?
 
@@ -332,8 +331,46 @@ model Consultation {
 
   consultationDate DateTime @default(now())
 
+  prescription Prescription?
+
   createdAt DateTime @default(now())
 
+  updatedAt DateTime @updatedAt
+}
+
+model Prescription {
+  id String @id @default(cuid())
+
+  consultationId String @unique
+
+  consultation Consultation @relation(fields: [consultationId], references: [id], onDelete: Cascade)
+
+  items PrescriptionItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PrescriptionItem {
+  id String @id @default(cuid())
+
+  prescriptionId String
+
+  prescription Prescription @relation(fields: [prescriptionId], references: [id], onDelete: Cascade)
+
+  medicationName String
+
+  dosage String
+
+  frequency String
+
+  duration String
+
+  quantity Int
+
+  instructions String?
+
+  createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
@@ -344,7 +381,7 @@ model AuditLog {
   organization   Organization @relation(fields: [organizationId], references: [id])
 
   userId String?
-  user   User? @relation(fields: [userId], references: [id])
+  user   User?   @relation(fields: [userId], references: [id])
 
   action String
 

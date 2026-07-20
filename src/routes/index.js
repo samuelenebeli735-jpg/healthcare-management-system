@@ -13,6 +13,7 @@ import queueRoutes from "./queue.route.js";
 import scheduleRoutes from "./schedule.route.js";
 import consultationRoutes from "./consultation.route.js";
 import auditRoutes from "./audit.route.js";
+import prescriptionRoutes from "./prescription.route.js";
 
 const router = Router();
 
@@ -61,5 +62,7 @@ router.use("/schedules", scheduleRoutes);
 router.use("/consultations", consultationRoutes);
 
 router.use("/audit", auditRoutes);
+
+router.use("/prescriptions", prescriptionRoutes);
 
 export default router;
